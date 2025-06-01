@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Stock Picking Form View -->
+    <record id="view_picking_form_inherit_vendor_evaluation" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.vendor.evaluation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Modifikasi: Tambahkan notebook tab untuk evaluasi vendor -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Evaluasi Vendor" invisible="picking_type_code != 'incoming'">
+                    <group>
+                        <group>
+                            <field name="is_evaluated" readonly="1"/>
+                            <field name="vendor_score" readonly="1" invisible="is_evaluated == False"/>
+                        </group>
+                        <group>
+                            <field name="vendor_evaluation_id" readonly="1" invisible="vendor_evaluation_id == False"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Modifikasi: Button untuk evaluasi -->
+                    <div class="oe_button_box" invisible="picking_type_code != 'incoming'">
+                        <button name="action_create_vendor_evaluation" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-star-o"
+                                string="Buat Evaluasi"
+                                invisible="is_evaluated == True"/>
+                        
+                        <button name="action_view_vendor_evaluation" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-star"
+                                string="Lihat Evaluasi"
+                                invisible="is_evaluated == False"/>
+                    </div>
+                    
+                    <!-- Modifikasi: Info evaluasi jika sudah ada -->
+                    <div invisible="is_evaluated == False">
+                        <separator string="Hasil Evaluasi Vendor"/>
+                        <group col="4">
+                            <label for="vendor_score" string="Total Skor"/>
+                            <field name="vendor_score" readonly="1"/>
+                        </group>
+                        <div class="alert alert-info">
+                            <p>Untuk melihat detail evaluasi lengkap, klik tombol "Lihat Evaluasi"</p>
+                        </div>
+                    </div>
+                </page>
+            </xpath>
+            
+            <!-- Modifikasi: Tambahkan button di header untuk akses cepat -->
+            <xpath expr="//header" position="inside">
+                <button name="action_create_vendor_evaluation" 
+                        type="object" 
+                        string="Evaluasi Vendor" 
+                        class="oe_highlight"
+                        invisible="picking_type_code != 'incoming' or is_evaluated == True or state != 'done'"/>
+                        
+                <button name="action_view_vendor_evaluation" 
+                        type="object" 
+                        string="Lihat Evaluasi" 
+                        class="oe_highlight"
+                        invisible="picking_type_code != 'incoming' or is_evaluated == False"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Stock Picking Tree View -->
+    <record id="view_picking_tree_inherit_vendor_evaluation" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit.vendor.evaluation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <!-- Modifikasi: Tambahkan kolom evaluasi di tree view -->
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="is_evaluated" string="Evaluated" invisible="picking_type_code != 'incoming'"/>
+                <field name="vendor_score" string="Vendor Score" invisible="picking_type_code != 'incoming'"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Modifikasi: Filter untuk penerimaan yang belum dievaluasi -->
+    <record id="view_picking_search_inherit_vendor_evaluation" model="ir.ui.view">
+        <field name="name">stock.picking.search.inherit.vendor.evaluation</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='late']" position="after">
+                <separator/>
+                <filter string="Belum Dievaluasi" name="not_evaluated" 
+                        domain="[('picking_type_code', '=', 'incoming'), ('state', '=', 'done'), ('is_evaluated', '=', False)]"/>
+                <filter string="Sudah Dievaluasi" name="evaluated" 
+                        domain="[('picking_type_code', '=', 'incoming'), ('is_evaluated', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

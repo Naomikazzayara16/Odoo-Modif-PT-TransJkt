@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Partner Form View -->
+    <record id="view_partner_form_inherit_vendor_rating" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.vendor.rating</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Add vendor evaluation tab in partner form -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Evaluasi Vendor" groups="stock.group_stock_user">
+                    <group>
+                        <group>
+                            <field name="vendor_rating" widget="float" readonly="1"/>
+                            <field name="vendor_evaluation_count" readonly="1"/>
+                            <field name="last_evaluation_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="vendor_status" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Add related evaluations list with simplified approach -->
+                    <separator string="Riwayat Evaluasi"/>
+                    <field name="vendor_evaluation_ids" readonly="1" nolabel="1"/>
+                </page>
+            </xpath>
+            
+            <!-- Add rating info in button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" 
+                        type="object" 
+                        name="action_view_vendor_evaluations" 
+                        icon="fa-star"
+                        invisible="vendor_evaluation_count == 0">
+                    <field string="Evaluasi Vendor" name="vendor_evaluation_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

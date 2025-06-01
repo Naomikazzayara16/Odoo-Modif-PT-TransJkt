@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor Evaluation Form View -->
+    <record id="view_vendor_evaluation_form" model="ir.ui.view">
+        <field name="name">vendor.evaluation.form</field>
+        <field name="model">vendor.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Evaluasi Vendor">
+                <header>
+                    <button name="action_complete_evaluation" 
+                            type="object" 
+                            string="Selesaikan Evaluasi" 
+                            class="oe_primary"
+                            invisible="evaluation_status != 'draft'"/>
+                    <field name="evaluation_status" widget="statusbar" statusbar_visible="draft,done,cancelled"/>
+                </header>
+                
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group>
+                            <field name="picking_id" readonly="1"/>
+                            <field name="evaluation_date"/>
+                            <field name="evaluator_id"/>
+                        </group>
+                        <group>
+                            <field name="total_score" readonly="1" widget="percentage"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Kriteria Evaluasi">
+                            <group string="Skor Evaluasi (0-100)">
+                                <field name="contract_status_score" widget="float"/>
+                                <field name="unit_price_score" widget="float"/>
+                                <field name="shipping_cost_score" widget="float"/>
+                            </group>
+                            
+                            <separator string="Total Skor"/>
+                            <group>
+                                <field name="total_score" readonly="1" widget="float" string="Total Skor Terbobot"/>
+                                <div class="oe_inline text-info">
+                                    Formula: (Status Kontrak × 30%) + (Harga Unit × 40%) + (Biaya Pengiriman × 30%)
+                                </div>
+                            </group>
+                        </page>
+                        
+                        <page string="Catatan">
+                            <field name="notes" placeholder="Masukkan catatan evaluasi, kendala yang ditemui, atau rekomendasi untuk perbaikan..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vendor Evaluation List View -->
+    <record id="view_vendor_evaluation_list" model="ir.ui.view">
+        <field name="name">vendor.evaluation.list</field>
+        <field name="model">vendor.evaluation</field>
+        <field name="arch" type="xml">
+            <list string="Evaluasi Vendor" decoration-success="evaluation_status=='done'" decoration-muted="evaluation_status=='cancelled'">
+                <field name="name"/>
+                <field name="evaluation_date"/>
+                <field name="partner_id"/>
+                <field name="picking_id"/>
+                <field name="contract_status_score"/>
+                <field name="unit_price_score"/>
+                <field name="shipping_cost_score"/>
+                <field name="total_score"/>
+                <field name="evaluation_status"/>
+                <field name="evaluator_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vendor Evaluation Search View -->
+    <record id="view_vendor_evaluation_search" model="ir.ui.view">
+        <field name="name">vendor.evaluation.search</field>
+        <field name="model">vendor.evaluation</field>
+        <field name="arch" type="xml">
+            <search string="Cari Evaluasi Vendor">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="picking_id"/>
+                <field name="evaluator_id"/>
+                
+                <filter string="Draft" name="draft" domain="[('evaluation_status', '=', 'draft')]"/>
+                <filter string="Selesai" name="done" domain="[('evaluation_status', '=', 'done')]"/>
+                <separator/>
+                <filter string="Skor Tinggi (≥75)" name="high_score" domain="[('total_score', '>=', 75)]"/>
+                <filter string="Skor Rendah (&lt;75)" name="low_score" domain="[('total_score', '&lt;', 75)]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter string="Vendor" name="group_vendor" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Status" name="group_status" domain="[]" context="{'group_by': 'evaluation_status'}"/>
+                    <filter string="Bulan" name="group_month" domain="[]" context="{'group_by': 'evaluation_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Menu Actions -->
+    <record id="action_vendor_evaluation" model="ir.actions.act_window">
+        <field name="name">Evaluasi Vendor</field>
+        <field name="res_model">vendor.evaluation</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Belum ada evaluasi vendor
+            </p>
+            <p>
+                Evaluasi vendor akan otomatis dibuat saat melakukan penerimaan barang.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_vendor_evaluation_root" 
+              name="Evaluasi Vendor" 
+              parent="stock.menu_stock_warehouse_mgmt"
+              action="action_vendor_evaluation"
+              sequence="20"/>
+</odoo>
