@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_tender" model="ir.ui.view">
+        <field name="name">purchase.order.form.tender</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_tender" 
+                        type="object" 
+                        string="Create Tender"
+                        class="btn-warning"
+                        attrs="{'invisible': ['|', ('tender_required', '=', False), ('tender_process_id', '!=', False)]}"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="tender_required" readonly="1"/>
+                <field name="tender_process_id" readonly="1" 
+                       attrs="{'invisible': [('tender_process_id', '=', False)]}"/>
+                <div class="alert alert-warning" role="alert" 
+                     attrs="{'invisible': ['|', ('tender_required', '=', False), ('tender_process_id', '!=', False)]}">
+                    <strong>⚠️ TENDER DIPERLUKAN!</strong><br/>
+                    Nilai PO melebihi Rp 200,000,000. Wajib melakukan proses tender sebelum konfirmasi.
+                    <br/>Klik tombol "Create Tender" untuk memulai proses tender.
+                </div>
+                <div class="alert alert-info" role="alert" 
+                     attrs="{'invisible': ['|', ('tender_process_id', '=', False), ('tender_process_id.state', '=', 'awarded')]}">
+                    <strong>ℹ️ TENDER SEDANG BERJALAN</strong><br/>
+                    Status: <field name="tender_process_id.state" readonly="1" style="display: inline;"/>
+                    <br/>PO tidak dapat dikonfirmasi sampai tender selesai.
+                </div>
+            </xpath>
+            
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_tender" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-gavel"
+                        attrs="{'invisible': [('tender_process_id', '=', False)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Tender</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
