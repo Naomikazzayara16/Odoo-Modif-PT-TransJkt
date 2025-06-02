@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vendor Bid Form View -->
+    <record id="view_vendor_bid_form" model="ir.ui.view">
+        <field name="name">vendor.bid.form</field>
+        <field name="model">vendor.bid</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Vendor Bid">
+                <header>
+                    <button name="action_submit_bid" 
+                            type="object" 
+                            string="Submit Bid"
+                            class="btn-primary"
+                            modifiers="{'invisible': [['state', '!=', 'invited']]}"/>
+                    <button name="action_view_tender" 
+                            type="object" 
+                            string="View Tender"
+                            class="btn-secondary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_tender" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-gavel">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">View</span>
+                                <span class="o_stat_text">Tender</span>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group>
+                            <field name="tender_id" readonly="1"/>
+                            <field name="vendor_id" readonly="1"/>
+                            <field name="bid_amount" modifier="{'readonly': [('state', '!=', 'invited')]}"/>
+                            <field name="submission_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="technical_score"/>
+                            <field name="price_score"/>
+                            <field name="total_score" readonly="1"/>
+                            <field name="is_winning_bid" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                        <page string="Attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Vendor Bid Tree View -->
+    <record id="view_vendor_bid_tree" model="ir.ui.view">
+        <field name="name">vendor.bid.tree</field>
+        <field name="model">vendor.bid</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'won'" 
+                  decoration-muted="state == 'lost'"
+                  decoration-info="state == 'submitted'">
+                <field name="tender_id"/>
+                <field name="vendor_id"/>
+                <field name="bid_amount"/>
+                <field name="technical_score"/>
+                <field name="price_score"/>
+                <field name="total_score"/>
+                <field name="submission_date"/>
+                <field name="state"/>
+                <field name="is_winning_bid" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Vendor Bid Search View -->
+    <record id="view_vendor_bid_search" model="ir.ui.view">
+        <field name="name">vendor.bid.search</field>
+        <field name="model">vendor.bid</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="tender_id"/>
+                <field name="vendor_id"/>
+                <field name="bid_amount"/>
+                <field name="state"/>
+                <separator/>
+                <filter name="invited" string="Invited" domain="[('state', '=', 'invited')]"/>
+                <filter name="submitted" string="Submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter name="won" string="Won" domain="[('state', '=', 'won')]"/>
+                <filter name="lost" string="Lost" domain="[('state', '=', 'lost')]"/>
+                <separator/>
+                <filter name="winning_bids" string="Winning Bids" domain="[('state', '=', 'won')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_tender" string="Tender" context="{'group_by': 'tender_id'}"/>
+                    <filter name="group_vendor" string="Vendor" context="{'group_by': 'vendor_id'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Vendor Bid Action -->
+    <record id="action_vendor_bid" model="ir.actions.act_window">
+        <field name="name">Vendor Bids</field>
+        <field name="res_model">vendor.bid</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_vendor_bid_search"/>
+    </record>
+    
+    <!-- Menu Item for Vendor Bids -->
+    <menuitem id="menu_tender_process" name="Tender Process" sequence="10"/>
+
+    <menuitem id="menu_vendor_bid"
+              name="Vendor Bids"
+              parent="menu_tender_process"
+              action="action_vendor_bid"
+              sequence="20"/>
+</odoo>

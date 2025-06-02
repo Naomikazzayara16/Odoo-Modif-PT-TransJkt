@@ -1,5 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_tender_process_user,tender.process.user,model_tender_process,purchase.group_purchase_user,1,1,1,0
 access_tender_process_manager,tender.process.manager,model_tender_process,purchase.group_purchase_manager,1,1,1,1
+access_tender_process_public,tender.process.public,model_tender_process,base.group_public,1,0,0,0
 access_vendor_bid_user,vendor.bid.user,model_vendor_bid,purchase.group_purchase_user,1,1,1,0
 access_vendor_bid_manager,vendor.bid.manager,model_vendor_bid,purchase.group_purchase_manager,1,1,1,1
+access_vendor_bid_supplier,vendor.bid.supplier,model_vendor_bid,base.group_portal,1,1,1,0

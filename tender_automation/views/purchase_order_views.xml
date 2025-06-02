@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Purchase Order Form View - Inherit -->
+    <record id="view_purchase_order_form_tender" model="ir.ui.view">
+        <field name="name">purchase.order.form.tender</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add tender-related buttons in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_create_tender" 
+                        type="object" 
+                        string="Create Tender"
+                        class="btn-secondary"
+                        modifier="{'invisible': ['|', ('tender_required', '=', False), ('tender_process_id', '!=', False)]}"/>
+                <button name="action_view_tender" 
+                        type="object" 
+                        string="View Tender"
+                        modifier="{'invisible': [('tender_process_id', '=', False)]}"/>
+            </xpath>
+            
+            <!-- Add tender fields after partner_id -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="tender_required" readonly="1"/>
+                <field name="tender_process_id" readonly="1" 
+                       modifier="{'invisible': [('tender_process_id', '=', False)]}"/>
+                <field name="tender_threshold" invisible="1"/>
+            </xpath>
+            
+            <!-- Add tender alert box -->
+            <xpath expr="//sheet" position="inside">
+                <div class="alert alert-warning" role="alert" 
+                     modifier="{'invisible': ['|', ('tender_required', '=', False), ('tender_process_id', '!=', False)]}">
+                    <strong>⚠️ Tender Required!</strong><br/>
+                    Total amount (<field name="amount_total" nolabel="1" readonly="1"/>) exceeds tender threshold 
+                    (<field name="tender_threshold" nolabel="1" readonly="1"/>). 
+                    Please create tender process before confirming this purchase order.
+                </div>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Purchase Order Tree View - Add tender columns -->
+    <record id="view_purchase_order_tree_tender" model="ir.ui.view">
+        <field name="name">purchase.order.tree.tender</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="tender_required" optional="show"/>
+                <field name="tender_process_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

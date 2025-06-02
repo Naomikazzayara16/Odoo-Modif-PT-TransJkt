@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Partner Form View - Add tender statistics -->
+    <record id="view_partner_form_tender" model="ir.ui.view">
+        <field name="name">res.partner.form.tender</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- Add tender stats buttons for suppliers -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_tender_bids" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-gavel"
+                        modifier="{'invisible': ['|', ('is_company', '=', False), ('supplier_rank', '=', 0)]}">
+                    <field name="tender_bid_count" widget="statinfo" string="Tender Bids"/>
+                </button>
+                <button name="action_view_tender_bids" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-trophy" 
+                        context="{'default_state': 'won'}"
+                        modifier="{'invisible': ['|', ('is_company', '=', False), ('supplier_rank', '=', 0)]}">
+                    <field name="tender_won_count" widget="statinfo" string="Tenders Won"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Partner Supplier Tree View - Add tender columns -->
+    <record id="view_partner_supplier_tree_tender" model="ir.ui.view">
+        <field name="name">res.partner.supplier.tree.tender</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='supplier_rank']" position="after">
+                <field name="tender_bid_count" optional="hide"/>
+                <field name="tender_won_count" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

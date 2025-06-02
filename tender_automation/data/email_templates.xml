@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tender Invitation Email Template -->
+    <record id="email_template_tender_invitation" model="mail.template">
+        <field name="name">Tender Invitation - PT Transportasi Jakarta</field>
+        <field name="model_id" ref="model_tender_process"/>
+        <field name="subject">Undangan Tender - ${object.name}</field>
+        <field name="email_from">${(object.company_id.email or user.email) | safe}</field>
+        <field name="use_default_to" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                <div style="background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="background-color: #1f4e79; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+                            <h2 style="margin: 0; text-align: center;">UNDANGAN TENDER</h2>
+                            <p style="margin: 5px 0 0 0; text-align: center; font-size: 14px;">PT Transportasi Jakarta</p>
+                        </div>
+                        
+                        <div style="padding: 20px;">
+                            <p style="margin-bottom: 15px;">Kepada Yth,<br/>
+                            Bapak/Ibu Pimpinan<br/>
+                            <strong>${ctx.get('recipient_name', 'Vendor')}</strong>
+                            </p>
+                            
+                            <p style="margin-bottom: 15px; text-align: justify;">Dengan hormat,</p>
+                            
+                            <p style="margin-bottom: 15px; text-align: justify;">
+                                PT Transportasi Jakarta dengan ini mengundang Bapak/Ibu untuk berpartisipasi dalam proses tender berikut:
+                            </p>
+                            
+                            <div style="background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold; width: 40%;">Nomor Tender:</td>
+                                        <td style="padding: 5px 0;">${object.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Purchase Order:</td>
+                                        <td style="padding: 5px 0;">${object.purchase_order_id.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Nilai Estimasi:</td>
+                                        <td style="padding: 5px 0;">Rp ${'{:,.0f}'.format(object.estimated_amount)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Batas Waktu Penawaran:</td>
+                                        <td style="padding: 5px 0;">${object.bid_submission_deadline.strftime('%d %B %Y, %H:%M WIB')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Status:</td>
+                                        <td style="padding: 5px 0;"><span style="background-color: #28a745; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px;">${object.state_display}</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            % if object.description:
+                            <div style="margin: 20px 0;">
+                                <p style="font-weight: bold; margin-bottom: 10px;">Deskripsi Tender:</p>
+                                <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #1f4e79; border-radius: 0 5px 5px 0;">
+                                    ${object.description | safe}
+                                </div>
+                            </div>
+                            % endif
+                            
+                            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                                <p style="margin: 0; color: #856404;">
+                                    <strong>⚠️ Penting:</strong> Pastikan penawaran Anda telah diterima sebelum batas waktu yang ditentukan. 
+                                    Penawaran yang terlambat tidak akan dipertimbangkan.
+                                </p>
+                            </div>
+                            
+                            <p style="margin: 20px 0; text-align: justify;">
+                                Untuk informasi lebih lanjut dan submit penawaran, silakan hubungi tim procurement kami melalui:
+                            </p>
+                            
+                            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
+                                <p style="margin: 0;"><strong>Tim Procurement PT Transportasi Jakarta</strong></p>
+                                <p style="margin: 5px 0;">Email: procurement@transjakarta.co.id</p>
+                                <p style="margin: 5px 0;">Telepon: (021) 1234-5678</p>
+                            </div>
+                            
+                            <p style="margin: 20px 0 10px 0; text-align: justify;">
+                                Terima kasih atas perhatian dan kerjasamanya. Kami menunggu partisipasi Bapak/Ibu dalam tender ini.
+                            </p>
+                            
+                            <p style="margin-top: 30px;">
+                                Hormat kami,<br/>
+                                <strong>Tim Procurement</strong><br/>
+                                PT Transportasi Jakarta
+                            </p>
+                        </div>
+                        
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 0 0 8px 8px; text-align: center; font-size: 12px; color: #6c757d;">
+                            <p style="margin: 0;">Email ini dikirim secara otomatis oleh sistem. Mohon tidak membalas email ini.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+    
+    <!-- Tender Award Notification Email Template -->
+    <record id="email_template_tender_award" model="mail.template">
+        <field name="name">Tender Award Notification - PT Transportasi Jakarta</field>
+        <field name="model_id" ref="model_tender_process"/>
+        <field name="subject">Pemberitahuan Pemenang Tender - ${object.name}</field>
+        <field name="email_from">${(object.company_id.email or user.email) | safe}</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif;">
+                <div style="background-color: #f8f9fa; padding: 20px;">
+                    <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div style="background-color: #28a745; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+                            <h2 style="margin: 0; text-align: center;">🎉 PEMBERITAHUAN PEMENANG TENDER</h2>
+                            <p style="margin: 5px 0 0 0; text-align: center; font-size: 14px;">PT Transportasi Jakarta</p>
+                        </div>
+                        
+                        <div style="padding: 20px;">
+                            <p style="margin-bottom: 15px;">Kepada Yth,<br/>
+                            Bapak/Ibu Pimpinan<br/>
+                            <strong>${object.winning_bid_id.vendor_id.name}</strong>
+                            </p>
+                            
+                            <p style="margin-bottom: 15px; text-align: justify;">Dengan hormat,</p>
+                            
+                            <p style="margin-bottom: 15px; text-align: justify;">
+                                Kami dengan senang hati memberitahukan bahwa perusahaan Bapak/Ibu telah terpilih sebagai 
+                                <strong style="color: #28a745;">PEMENANG TENDER</strong> untuk:
+                            </p>
+                            
+                            <div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold; width: 40%;">Nomor Tender:</td>
+                                        <td style="padding: 5px 0;">${object.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Purchase Order:</td>
+                                        <td style="padding: 5px 0;">${object.purchase_order_id.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Nilai Penawaran Pemenang:</td>
+                                        <td style="padding: 5px 0; color: #28a745; font-weight: bold;">Rp ${'{:,.0f}'.format(object.winning_bid_id.bid_amount)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; font-weight: bold;">Skor Total:</td>
+                                        <td style="padding: 5px 0;">${'{:.1f}'.format(object.winning_bid_id.total_score)}/100</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <p style="margin: 20px 0; text-align: justify;">
+                                Selamat! Tim evaluasi telah menilai penawaran Bapak/Ibu sebagai yang terbaik berdasarkan 
+                                kriteria teknis dan harga yang telah ditetapkan.
+                            </p>
+                            
+                            <div style="background-color: #cce5ff; border: 1px solid #99ccff; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                                <p style="margin: 0; color: #004085;">
+                                    <strong>📋 Langkah Selanjutnya:</strong><br/>
+                                    Tim kami akan segera menghubungi Bapak/Ibu untuk proses kontrak dan koordinasi pelaksanaan pekerjaan.
+                                </p>
+                            </div>
+                            
+                            <p style="margin: 20px 0; text-align: justify;">
+                                Untuk informasi lebih lanjut, silakan hubungi tim procurement kami.
+                            </p>
+                            
+                            <p style="margin: 20px 0 10px 0; text-align: justify;">
+                                Terima kasih atas partisipasi dan kerjasama yang baik.
+                            </p>
+                            
+                            <p style="margin-top: 30px;">
+                                Hormat kami,<br/>
+                                <strong>Tim Procurement</strong><br/>
+                                PT Transportasi Jakarta
+                            </p>
+                        </div>
+                        
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 0 0 8px 8px; text-align: center; font-size: 12px; color: #6c757d;">
+                            <p style="margin: 0;">Email ini dikirim secara otomatis oleh sistem. Mohon tidak membalas email ini.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+</odoo>

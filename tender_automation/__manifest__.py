@@ -1,6 +1,6 @@
 {
     "name": "Tender Automation - PT Transportasi Jakarta",
-    "version": "16.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Purchases",
     "summary": "Otomatis tender untuk pembelian di atas 200 juta",
     "description": """
@@ -15,14 +15,16 @@
     "author": "PT Transportasi Jakarta",
     "website": "https://transjakarta.co.id",
     "license": "LGPL-3",
-    "depends": ["base", "purchase", "mail"],
+    "depends": ["base", "purchase", "mail", "contacts"],
     "data": [
         "security/ir.model.access.csv",
         "data/ir_sequence_data.xml",
         "data/email_templates.xml",
-        "views/purchase_order_views.xml",
-        "views/tender_process_views.xml",
         "views/vendor_bid_views.xml",
+        "views/tender_process_views.xml",
+        "views/purchase_order_views.xml", 
+        "views/res_company_views.xml",
+        "views/res_partner_views.xml",
     ],
     "installable": True,
     "application": False,
