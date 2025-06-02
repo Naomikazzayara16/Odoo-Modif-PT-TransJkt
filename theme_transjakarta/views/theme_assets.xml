@@ -1,0 +1,7 @@
+<odoo>
+    <template id="assets_backend" name="theme_transjakarta assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/css" href="/theme_transjakarta/static/src/css/theme_transjakarta.css"/>
+        </xpath>
+    </template>
+</odoo>

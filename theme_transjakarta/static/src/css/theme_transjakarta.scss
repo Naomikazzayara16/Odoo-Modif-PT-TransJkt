@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap');
+// Override warna utama
+$o-brand-primary: #06367c !default; // Biru Transjakarta
+$o-brand-secondary: #e6f0fa !default; // Biru muda
+$o-brand-lightsecondary: #e6f0fa !default;
+$o-main-text-color: #222e3a !default;
+$o-main-headings-color: #06367c !default;
+$o-main-link-color: #06367c !default;
+$o-webclient-background-color: #f7fbff !default;
+$o-list-footer-color: #06367c !default;
+$o-list-group-header-color: #06367c !default;
+
+// Override font
+$o-font-family-sans-serif: 'Montserrat', 'Segoe UI', 'Arial', sans-serif !default;
+$o-headings-font-family: 'Montserrat', 'Segoe UI', 'Arial', sans-serif !default;
+
+// Komponen utama
+$o-view-background-color: #f7fbff !default;
+$o-component-active-bg: #e6f0fa !default;
+
+// Tombol utama
+$o-action: #06367c !default;
+
+// Override warna utama Bootstrap
+$primary: #06367c !default;
+$secondary: #e6f0fa !default;
+$info: #5794dd !default;
+$success: #30C381 !default;
+$warning: #e8bb1d !default;
+$danger: #ee2d2d !default;
+
+// Override warna tag dan kanban
+$o-colors: #06367c, #ee2d2d, #dc8534, #e8bb1d, #5794dd, #9f628f, #db8865,
+           #41a9a2, #304be0, #ee2f8a, #61c36e, #9872e6 !default;
+
+// Contoh override langsung selector jika perlu
+body.o_web_client {
+    font-family: 'Montserrat', 'Segoe UI', 'Arial', sans-serif;
+    background-color: #e6f0fa;
+}
+.o_main_navbar, .o_control_panel {
+    background-color: #06367c !important;
+}
+.o_main_navbar .o_menu_brand {
+    color: #fff !important;
+    font-weight: bold;
+}
+
+// Navbar dan menu
+.o_main_navbar, .o_menu_sections, .o_menu_systray {
+    background-color: #06367c !important;
+    color: #fff !important;
+}
+.o_main_navbar .o_menu_brand, .o_menu_sections .o_menu_brand {
+    color: #fff !important;
+    font-weight: bold;
+}
+
+// Tombol pada navbar
+.o_main_navbar .btn, .o_main_navbar .btn-primary, .o_main_navbar .btn.o_primary {
+    background-color: #04214a !important;
+    border-color: #04214a !important;
+    color: #fff !important;
+}
+.o_main_navbar .btn-secondary, .o_main_navbar .btn.o_secondary {
+    background-color: #e6f0fa !important;
+    border-color: #e6f0fa !important;
+    color: #06367c !important;
+}
+.o_main_navbar .btn:hover, .o_main_navbar .btn-primary:hover, .o_main_navbar .btn.o_primary:hover {
+    background-color: #02112a !important;
+    border-color: #02112a !important;
+    color: #fff !important;
+}
+.o_main_navbar .btn-secondary:hover, .o_main_navbar .btn.o_secondary:hover {
+    background-color: #b3d4f7 !important;
+    border-color: #b3d4f7 !important;
+    color: #06367c !important;
+}
+
+// Button utama
+.btn-primary, .o_form_button_save, .o_form_button_create, .o_list_button_add, .o_button, .btn.btn-primary, .btn.o_primary {
+    background-color: #06367c !important;
+    border-color: #06367c !important;
+    color: #fff !important;
+}
+.btn-primary:hover, .o_form_button_save:hover, .o_form_button_create:hover, .o_list_button_add:hover, .o_button:hover, .btn.btn-primary:hover, .btn.o_primary:hover {
+    background-color: #04214a !important;
+    border-color: #04214a !important;
+    color: #fff !important;
+}
+
+// Button secondary
+.btn-secondary, .btn.o_secondary {
+    background-color: #e6f0fa !important;
+    border-color: #e6f0fa !important;
+    color: #06367c !important;
+}
+.btn-secondary:hover, .btn.o_secondary:hover {
+    background-color: #b3d4f7 !important;
+    border-color: #b3d4f7 !important;
+    color: #06367c !important;
+}
+
+// Tab aktif
+.nav-tabs .nav-link.active, .o_tab_active {
+    background-color: #06367c !important;
+    color: #fff !important;
+    border-color: #06367c #06367c #fff !important;
+}
+// Tab tidak aktif
+.nav-tabs .nav-link, .o_tab_inactive {
+    background-color: #e6f0fa !important;
+    color: #06367c !important;
+    border-color: #e6f0fa #e6f0fa #fff !important;
+}
+
+// Dropdown item pada navbar: default biru, hover/active putih dengan teks biru
+.o_main_navbar .dropdown-menu, .o_main_navbar .dropdown-item {
+    background-color: #06367c !important;
+    color: #fff !important;
+}
+.o_main_navbar .dropdown-item:hover, .o_main_navbar .dropdown-item:focus, .o_main_navbar .dropdown-item.active {
+    background-color: #04214a !important;
+    color: #fff !important;
+}
+
+// Button di dalam dropdown navbar
+.o_main_navbar .dropdown-menu .btn, .o_main_navbar .dropdown-menu .btn-primary {
+    background-color: #06367c !important;
+    border-color: #06367c !important;
+    color: #fff !important;
+}
+.o_main_navbar .dropdown-menu .btn:hover, .o_main_navbar .dropdown-menu .btn:focus, .o_main_navbar .dropdown-menu .btn.active {
+    background-color: #fff !important;
+    color: #06367c !important;
+    border-color: #06367c !important;
+}
+
+// Icon, span, checkbox, radio, dsb yang masih ungu Odoo
+svg, .fa, .o_icon, .o_main_navbar .fa, .o_main_navbar svg, .o_main_navbar .o_icon {
+    color: #06367c !important;
+    fill: #06367c !important;
+}
+input[type="checkbox"]:checked {
+    accent-color: #06367c !important;
+}
+input[type="radio"]:checked {
+    accent-color: #06367c !important;
+}
+.o-checkbox input:checked + span, .o-radio input:checked + span {
+    background-color: #06367c !important;
+    border-color: #06367c !important;
+}
+
+// Control panel di bawah navbar putih
+.o_control_panel {
+    background-color: #fff !important;
+    color: #06367c !important;
+}
+
+// Menu tab horizontal di bawah navbar utama
+.o_menu_sections {
+    background-color: #06367c !important;
+}
+.o_menuitem {
+    background-color: #06367c !important;
+    color: #fff !important;
+}
+.o_menuitem.active, .o_menuitem.selected {
+    background-color: #04214a !important;
+    color: #fff !important;
+}
+
+// Override warna halaman login
+.o_login_background, .o_login {
+    background-color: #06367c !important;
+}
+.o_login_box {
+    background-color: #fff !important;
+    color: #06367c !important;
+    border-radius: 8px;
+}
+.o_login .btn-primary, .o_login .btn.o_primary {
+    background-color: #06367c !important;
+    border-color: #06367c !important;
+    color: #fff !important;
+}
+.o_login .btn-primary:hover, .o_login .btn.o_primary:hover {
+    background-color: #04214a !important;
+    border-color: #04214a !important;
+    color: #fff !important;
+} 
