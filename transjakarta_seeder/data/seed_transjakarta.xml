@@ -1,0 +1,178 @@
+<odoo>
+    <!-- 1. Vendor (Supplier) -->
+    <record id="vendor_karoseri" model="res.partner">
+        <field name="name">PT. Karoseri Nusantara</field>
+        <field name="supplier_rank">1</field>
+        <field name="is_company">True</field>
+        <field name="street">Jl. Raya Bogor KM 26</field>
+        <field name="city">Jakarta</field>
+        <field name="vat">01.234.567.8-999.000</field>
+        <field name="email">info@karoseri.co.id</field>
+        <field name="phone">021-12345678</field>
+    </record>
+    <record id="vendor_ban" model="res.partner">
+        <field name="name">PT. Ban Jakarta</field>
+        <field name="supplier_rank">1</field>
+        <field name="is_company">True</field>
+        <field name="street">Jl. Industri No. 10</field>
+        <field name="city">Bekasi</field>
+        <field name="vat">02.345.678.9-888.000</field>
+        <field name="email">sales@banjakarta.co.id</field>
+        <field name="phone">021-87654321</field>
+    </record>
+    <record id="vendor_oli" model="res.partner">
+        <field name="name">PT. Oli Prima</field>
+        <field name="supplier_rank">1</field>
+        <field name="is_company">True</field>
+        <field name="street">Jl. Raya Cakung No. 5</field>
+        <field name="city">Jakarta Timur</field>
+        <field name="vat">03.456.789.0-777.000</field>
+        <field name="email">admin@oliprima.co.id</field>
+        <field name="phone">021-11223344</field>
+    </record>
+
+    <!-- 2. Product Category -->
+    <record id="cat_bus" model="product.category">
+        <field name="name">Bus</field>
+    </record>
+    <record id="cat_sparepart" model="product.category">
+        <field name="name">Suku Cadang</field>
+    </record>
+    <record id="cat_consumable" model="product.category">
+        <field name="name">Bahan Habis Pakai</field>
+    </record>
+
+    <!-- 3. Unit of Measure (tambahan) -->
+    <record id="uom_set" model="uom.uom">
+        <field name="name">Set</field>
+        <field name="category_id" ref="uom.product_uom_categ_unit"/>
+        <field name="uom_type">bigger</field>
+        <field name="factor_inv">10</field>
+        <field name="rounding">1.0</field>
+        <field name="active">True</field>
+    </record>
+    <record id="uom_categ_liter" model="uom.category">
+        <field name="name">Volume</field>
+    </record>
+    <record id="uom_liter" model="uom.uom">
+        <field name="name">Liter</field>
+        <field name="category_id" ref="uom_categ_liter"/>
+        <field name="uom_type">reference</field>
+        <field name="factor">1</field>
+        <field name="rounding">0.01</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- 4. Produk -->
+    <record id="product_bus_mercedes" model="product.template">
+        <field name="name">Bus Mercedes</field>
+        <field name="default_code">BUS-MRC</field>
+        <field name="categ_id" ref="cat_bus"/>
+        <field name="uom_id" ref="uom.product_uom_unit"/>
+        <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        <field name="list_price">1500000000</field>
+        <field name="standard_price">1200000000</field>
+        <field name="barcode">BUSMRC001</field>
+        <field name="seller_ids" eval="[
+            (0, 0, {
+                'partner_id': ref('vendor_karoseri'),
+                'min_qty': 1,
+                'price': 1200000000
+            })
+        ]"/>
+        <field name="description">Bus Mercedes kapasitas 60 penumpang</field>
+    </record>
+    <record id="product_ban_bus" model="product.template">
+        <field name="name">Ban Bus</field>
+        <field name="default_code">BAN-BUS</field>
+        <field name="categ_id" ref="cat_sparepart"/>
+        <field name="uom_id" ref="uom.product_uom_unit"/>
+        <field name="uom_po_id" ref="uom.product_uom_unit"/>
+        <field name="list_price">5000000</field>
+        <field name="standard_price">4000000</field>
+        <field name="barcode">BANBUS001</field>
+        <field name="seller_ids" eval="[
+            (0, 0, {
+                'partner_id': ref('vendor_ban'),
+                'min_qty': 4,
+                'price': 4000000
+            })
+        ]"/>
+        <field name="description">Ban bus ukuran 295/80R22.5</field>
+    </record>
+    <record id="product_oli_mesin" model="product.template">
+        <field name="name">Oli Mesin</field>
+        <field name="default_code">OLI-MSN</field>
+        <field name="categ_id" ref="cat_consumable"/>
+        <field name="uom_id" ref="uom_liter"/>
+        <field name="uom_po_id" ref="uom_liter"/>
+        <field name="list_price">120000</field>
+        <field name="standard_price">100000</field>
+        <field name="barcode">OLIMSN001</field>
+        <field name="seller_ids" eval="[
+            (0, 0, {
+                'partner_id': ref('vendor_oli'),
+                'min_qty': 10,
+                'price': 100000
+            })
+        ]"/>
+        <field name="description">Oli mesin diesel 15W-40</field>
+    </record>
+
+    <!-- 5. Warehouse & Location -->
+    <record id="stock_warehouse_pegangsaan" model="stock.warehouse">
+        <field name="name">Pool Pegangsaan</field>
+        <field name="code">PGS</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+    <record id="stock_warehouse_cijantung" model="stock.warehouse">
+        <field name="name">Pool Cijantung</field>
+        <field name="code">CJT</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- 6. Purchase Order (Draft) -->
+    <record id="purchase_order_bus" model="purchase.order">
+        <field name="partner_id" ref="vendor_karoseri"/>
+        <field name="date_order">2024-06-01</field>
+        <field name="order_line" eval="[
+            (0, 0, {
+                'product_id': ref('product_bus_mercedes'),
+                'name': 'Bus Mercedes',
+                'product_qty': 2,
+                'product_uom': ref('uom.product_uom_unit'),
+                'price_unit': 1200000000
+            })
+        ]"/>
+        <field name="state">draft</field>
+    </record>
+    <record id="purchase_order_ban" model="purchase.order">
+        <field name="partner_id" ref="vendor_ban"/>
+        <field name="date_order">2024-06-02</field>
+        <field name="order_line" eval="[
+            (0, 0, {
+                'product_id': ref('product_ban_bus'),
+                'name': 'Ban Bus',
+                'product_qty': 8,
+                'product_uom': ref('uom.product_uom_unit'),
+                'price_unit': 4000000
+            })
+        ]"/>
+        <field name="state">draft</field>
+    </record>
+    <record id="purchase_order_oli" model="purchase.order">
+        <field name="partner_id" ref="vendor_oli"/>
+        <field name="date_order">2024-06-03</field>
+        <field name="order_line" eval="[
+            (0, 0, {
+                'product_id': ref('product_oli_mesin'),
+                'name': 'Oli Mesin',
+                'product_qty': 50,
+                'product_uom': ref('uom_liter'),
+                'price_unit': 100000
+            })
+        ]"/>
+        <field name="state">draft</field>
+    </record>
+
+</odoo>
